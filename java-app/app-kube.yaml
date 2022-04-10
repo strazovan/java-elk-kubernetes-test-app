@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: elk-java-test-app-deplyoment
+  labels:
+    app: elk-java-test-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: elk-java-test-app
+  template:
+    metadata:
+      labels:
+        app: elk-java-test-app
+    spec:
+      containers:
+        - name: elk-java-test-app
+          image: java-elk-test-app
+          imagePullPolicy: Never # this is here just because this is a local image
+          ports:
+            - containerPort: 18080
+
+--- # service
+apiVersion: v1
+kind: Service
+metadata:
+  name: elk-java-test-app-service
+  labels:
+    app: elk-java-test-app
+spec:
+  selector:
+    app: elk-java-test-app
+  ports:
+    - protocol: TCP
+      port: 18080
+      targetPort: 18080
